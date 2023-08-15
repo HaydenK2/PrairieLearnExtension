@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flask app</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{url_for('static', filename='styles/test.css')}}">
+    </head>
+    <script id = "jsonData" type = "module">
+        //https://stackoverflow.com/questions/54795740/access-to-fetch-at-from-origin-has-been-blocked-by-cors-policy-no-acce
+        //about json and html display
+        //https://www.youtube.com/watch?v=nx8E5BF0XuE
+
+        //https://www.youtube.com/watch?v=Z92PqSyUBSI
+        "use strict"
+        import users from './JSON/sample.json' assert {type: 'json'};
+        
+        function createData() {
+            console.log(users);
+            const assignmentArr = [];
+            const dateArr = [];
+            for (let i = 0; i < users.length; ++i) {
+                assignmentArr[i] = users[i].assignemntname;                
+                dateArr[i] = users[i].duedate;
+            }
+            
+            //sort the dateArr and assignmentArr
+            for (let i = 0; i < dateArr.length; ++i) {
+                //split the dueDateArray by space (Might be / if changed)
+                const currSplittedDays = dateArr[i].split("-");
+                const currDueDateNum = parseInt(currSplittedDays[currSplittedDays.length - 1]);
+                for (let j = 0; j < dateArr.length - 1; ++j) {
+                    const nextSplittedDays = dateArr[j].split("-");
+                    const nextDueDateNum = parseInt(nextSplittedDays[nextSplittedDays.length - 1]);
+
+                    if (currDueDateNum < nextDueDateNum) {
+                        const tempDate = dateArr[i];
+                        const tempAssignmentName = assignmentArr[i];
+                        dateArr[i] = dateArr[j];
+                        dateArr[j] = tempDate;
+                        assignmentArr[i] = assignmentArr[j];
+                        assignmentArr[j] = tempAssignmentName;
+                    }
+                }
+            }
+
+            for (let i = 0; i < dateArr.length; ++i) {
+                addDiv(assignmentArr[i], dateArr[i]);
+            }
+
+
+        }
+
+        createData();
+    </script>
+    <script>
+        assignmentNum = 1;
+
+        function addDiv(name, num) {
+            makeAssignmentBox(name, num, assignmentNum);
+            assignmentNum++;
+            //console.log("added div");
+        }
+
+        function makeAssignmentBox(assignmentName, dueDate, assignmentNum) {
+            const newDiv = document.createElement("div");
+            newDiv.classList.add('assignment-box');
+           
+            document.getElementById("idBoxedBorder").appendChild(newDiv);
+            
+            //create the assignment name text
+            var assignmentNameDiv = document.createElement("div");
+            assignmentNameDiv.style = "margin-left: 10px; font-size: 25px";
+            assignmentNameStr = assignmentNum + ") " + assignmentName;
+            assignmentNameText = document.createTextNode(assignmentNameStr);
+            assignmentNameDiv.appendChild(assignmentNameText);
+            
+            newDiv.appendChild(assignmentNameDiv);            
+
+            //create the Due text
+            newDiv.insertAdjacentHTML(
+                'beforeend',
+                `<span style="margin-left: 10px; font-weight: bold; font-size: 20px;"> Due Date: </span>`,
+            );
+
+            //create the Assignment's Due Date text
+            var dueDateSpan = document.createElement("span");
+            //make a Date Object
+            var datetime = new Date();
+
+            var currDay = datetime.getDate();
+            var currMonth = datetime.getMonth();
+
+            //https://iq.opengenus.org/display-live-time-and-date-in-html/
+            console.log("Current Month: " + currMonth);
+            console.log("Current Day: " + currDay);
+            
+            //split the duedate word, so we can eventually isolate the day number
+            const dueDateArray = dueDate.split("-");
+            
+            console.log("a " + dueDateArray[dueDateArray.length - 1]);
+            //turn the day number string into an int
+            dueDateNum = parseInt(dueDateArray[dueDateArray.length - 1]);
+            isDueSoon = false;
+            //if the month in dueDate is within current month
+            //if the day in dueDate is within current day
+            if (currDay > dueDateNum || Math.abs(dueDateNum - currDay) < 3) {
+                isDueSoon = true;
+            }
+
+            if (isDueSoon) {
+                dueDateSpan.style = "color: red; font-weight: bold";
+            }
+
+            dueDateStr = dueDate;
+            dueDateText = document.createTextNode(dueDateStr);
+            dueDateSpan.appendChild(dueDateText);
+            
+            newDiv.appendChild(dueDateSpan);
+        }
+    </script>
+    <body>
+        <div>
+            <span> DUE S</span>
+        </div>
+        
+        
+
+    </body>
+</html>

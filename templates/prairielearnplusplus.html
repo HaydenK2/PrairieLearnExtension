@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel= "stylesheet" type= "text/css" href= "{{url_for('static', filename='styles/custom_style.css')}}">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <header class = "header-styling">
+            <div class = "header-text-container">
+                <span class = "header-text"> PrairieLearn++</span>
+            </div>
+        </header>
+        
+        <div class = "main-container">
+
+            <div class = "assignment-box-container">
+                <div class = "assignment-box-header"> 
+                    <div class = "assignment-box-title-container">
+                        <span class = "assignment-box-title-text"> Due Dates </span>
+                    </div>
+
+                </div>
+
+                <div class = "boxed-border" id = "idBoxedBorder">
+                    {% for item in output %}
+                        {% if item[2] == "0" %}
+                            <div class = "assignment-box">
+                                <div style = "margin-left: 10px; font-size: 25px">
+                                    {{item[3]}}) {{item[0]}}
+                                </div> 
+                                <div style = "margin-bottom: 10px">
+                                    <span style="margin-left: 10px; font-weight: bold; font-size: 20px;"> Due Date: </span>
+                                    <span> {{item[1]}}</span>
+                                </div>
+                                
+                            </div>
+                        {% endif %}
+                        {% if item[2] == "1" %}
+                            <div class = "assignment-box">
+                                <div style = "margin-left: 10px; font-size: 25px">
+                                    {{item[3]}}) {{item[0]}}
+                                </div>
+                                <div style = "margin-bottom: 10px">
+                                    <span style = "margin-left: 10px; font-weight: bold; font-size: 20px;"> Due Date: </span>
+                                    <span style = "color: red; font-weight: bold"> {{item[1]}}</span>
+                                </div>
+                                
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+        
+        </div>
+
+        <footer class = "footer-container">
+            <div class = "footer-image">
+                <img src= "https://www.prairielearn.org/images/grassy_landscape.svg" width = "2000" height= "50">
+            </div>
+        </footer>
+                
+
+    </body>
+</html>
